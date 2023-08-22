@@ -1,0 +1,40 @@
+{{#>admin}}
+{{#*inline "content"}}
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-10">Manage Products</div>
+                <div class="col-2"><a href="/admin/products/create" class="btn btn-primary">Create product</a></div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each viewData.products}}
+                <tr>
+                    <td>{{getId}}</td>
+                    <td><img src="/img/products/{{getImage}}" alt="{{getName}}" width="100px"></td>
+                    <td>{{getName}}</td>
+                    <td>
+                        <a href="/admin/products/{{getId}}" class="btn btn-info">Edit</a>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            </table>
+        </div>
+    </div>
+{{/inline}}
+{{/admin}}

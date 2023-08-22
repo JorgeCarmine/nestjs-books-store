@@ -1,0 +1,50 @@
+{{#>admin}}
+{{#*inline "content"}}
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-12">Edit product</div>
+            </div>
+        </div>
+        <div class="card-body">
+            {{#with viewData.product}}
+            <form method="POST" action="/admin/products/{{getId}}/update" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col">
+                    <div class="mb-3 row">
+                        <label class="col-lg-2 col-md-6 col-sm-12 col-form-label">Name:</label>
+                        <div class="col-lg-10 col-md-6 col-sm-12">
+                            <input name="name" type="text" class="form-control" value="{{getName}}" required>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col">
+                    <div class="mb-3 row">
+                        <label class="col-lg-2 col-md-6 col-sm-12 col-form-label">Price:</label>
+                        <div class="col-lg-10 col-md-6 col-sm-12">
+                            <input name="price" type="number" class="form-control" value="{{getPrice}}" required>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="description" rows="3" required>{{getDescription}}</textarea>
+                </div>
+                <div class="mb-3">
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3">
+                        <img src="/img/products/{{getImage}}" alt="" width="150px">
+                    </div>
+                    <div class="col-6">
+                        <input type="file" name="image" id="" class="form-control">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            {{/with}}
+        </div>
+    </div>
+{{/inline}}
+{{/admin}}
