@@ -4,10 +4,9 @@ import { Repository } from 'typeorm';
 import { Product } from 'src/models/product.entity';
 
 @Injectable()
-export class ProductService {
+export class ProductsService {
   constructor(
-    @InjectRepository(Product)
-    private productsRepository: Repository<Product>,
+    @InjectRepository(Product) private productsRepository: Repository<Product>,
   ) {}
 
   findAll(): Promise<Product[]> {
@@ -23,6 +22,6 @@ export class ProductService {
   }
 
   deleteProduct(id: number) {
-    return this.productsRepository.delete(id);
+    return this.productsRepository.softDelete(id);
   }
 }

@@ -22,13 +22,19 @@
                 {{#each viewData.products}}
                 <tr>
                     <td>{{getId}}</td>
-                    <td><img src="/img/products/{{getImage}}" alt="{{getName}}" width="100px"></td>
+                    <td><img src="https://carmine-nestjs-books-store.s3.us-east-1.amazonaws.com/products/{{getImage}}" alt="{{getName}}" width="100px"></td>
                     <td>{{getName}}</td>
                     <td>
-                        <a href="/admin/products/{{getId}}" class="btn btn-info">Edit</a>
+                        <a href="/admin/products/{{getId}}" class="btn btn-info">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
                     </td>
                     <td>
-                        <button class="btn btn-danger">Delete</button>
+                        <form action="/admin/products/{{getId}}/delete" method="post">
+                            <button class="btn btn-danger">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 {{/each}}

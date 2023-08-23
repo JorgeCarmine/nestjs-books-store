@@ -5,9 +5,12 @@ import { ProductController } from './products.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminController } from './admin/admin.controller';
 import { AdminModule } from './admin/admin.module';
-import { ProductService } from './services/product.service';
+import { ProductsService } from './services/product.service';
 import { Product } from './models/product.entity';
-import { AdminProductsController } from './admin/admin.products.controller';
+import { UsersService } from './services/users.service';
+import { User } from './models/user.entity';
+import { AuthModule } from './auth/auth.module';
+import { S3Service } from './services/s3.service';
 
 @Global()
 @Module({
@@ -23,11 +26,12 @@ import { AdminProductsController } from './admin/admin.products.controller';
       "entities": ["dist/**/*.entity{.ts,.js}"],
       "synchronize": true
     }),
-    TypeOrmModule.forFeature([Product]),
-    AdminModule
+    TypeOrmModule.forFeature([Product, User]),
+    AdminModule,
+    AuthModule
   ],
-  controllers: [AppController, ProductController, AdminController],
-  providers: [ProductService],
-  exports: [ProductService]
+  controllers: [AppController, ProductController],
+  providers: [ProductsService, UsersService, S3Service],
+  exports: [ProductsService, UsersService, S3Service]
 })
 export class AppModule {}

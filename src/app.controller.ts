@@ -1,10 +1,11 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Render, Req } from '@nestjs/common';
 
 @Controller()
 export class AppController {
   @Get()
   @Render('index')
-  index() {
+  index(@Req() request) {
+    console.log(request.session);
     return {
       title: "Carmine's book store",
     };

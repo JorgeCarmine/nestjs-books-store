@@ -16,7 +16,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
+          <ul class="navbar-nav ms-auto">
             <li class="nav-item active">
               <a class="nav-link" href="/">Home</a>
             </li>
@@ -26,7 +26,21 @@
             <li class="nav-item">
               <a class="nav-link" href="/about">About</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/auth/register">Register</a>
             </li>
+              {{#if session.user}}
+              <li>
+                <a class="nav-link" href="">{{session.user.name}}</a>
+              </li>
+              <li>
+                <a class="nav-link" href="/auth/logout">Logout</a>
+              </li>
+              {{else}}
+              <li>
+                <a class="nav-link" href="/auth/login">Login</a>
+              </li>
+              {{/if}}
           </ul>
         </div>
       </div>

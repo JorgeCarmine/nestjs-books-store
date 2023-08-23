@@ -1,13 +1,15 @@
 import { Body, Controller, Get, Param, Post, Redirect, Render, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Product } from "src/models/product.entity";
-import { ProductService } from "src/services/product.service";
+import { ProductsService } from "src/services/product.service";
+import { S3Service } from "src/services/s3.service";
 
 @Controller('/admin/products')
 export class AdminProductsController {
 
     constructor(
-        private readonly productsService: ProductService
+        private readonly s3Service: S3Service,
+        private readonly productsService: ProductsService
     ){}
 
     @Get('/')
@@ -23,14 +25,21 @@ export class AdminProductsController {
     create() {}
 
     @Post('/store')
-    @UseInterceptors(FileInterceptor('image', { dest: './public/img/products' }))
+    // @UseInterceptors(FileInterceptor('image', { dest: './public/img/products' }))
+    @UseInterceptors(FileInterceptor('image'))
     @Redirect('/admin/products')
     async store(@Body() body, @UploadedFile() file: Express.Multer.File) {
+        const fileName = Date.now().toString();
         const newProduct = new Product();
         newProduct.setName(body.name);
         newProduct.setPrice(body.price);
         newProduct.setDescription(body.description);
-        newProduct.setImage(file.filename)
+
+        if(file) {
+            await this.s3Service.uploadFile(`products/${fileName}`, file);
+            newProduct.setImage(fileName);
+        }
+
         await this.productsService.createOrUpdate(newProduct);
     }
 
@@ -43,14 +52,28 @@ export class AdminProductsController {
     }
 
     @Post('/:id/update')
-    @UseInterceptors(FileInterceptor('image', { dest: './public/img/products' }))
+    @UseInterceptors(FileInterceptor('image'))
     @Redirect('/admin/products')
     async update(@Body() body, @Param() params, @UploadedFile() file: Express.Multer.File) {
         const product = await this.productsService.findOne(params.id);
         product.setName(body.name);
         product.setPrice(body.price);
         product.setDescription(body.description);
-        product.setImage(file.filename)
+        
+        if(file) {
+            const fileName = Date.now().toString();
+            await this.s3Service.uploadFile(`products/${fileName}`, file);
+            await this.s3Service.deleteFile(`products/${product.getImage()}`);
+
+            product.setImage(fileName);
+        }
+
         await this.productsService.createOrUpdate(product);
+    }
+
+    @Post(':id/delete')
+    @Redirect('/admin/products')
+    async delete(@Param() params) {
+        await this.productsService.deleteProduct(params.id);
     }
 }
